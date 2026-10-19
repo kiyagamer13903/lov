@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>L0VE Is beautiful</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+  :root{
+    --lavender-deep:#2d1b3d;
+    --lavender-mid:#4a2d63;
+    --lavender:#9b7fc7;
+    --lavender-light:#c9b6e4;
+    --lavender-soft:#e8ddf5;
+    --lilac:#d4a5e8;
+    --gold:#f0d08a;
+    --gold-soft:#f7e3b0;
+    --blush:#f3e9fa;
+    --glass: rgba(200,170,230,0.07);
+    --glass-border: rgba(200,170,230,0.18);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color: transparent;}
+
+  html,body{
+    width:100%;
+    min-height:100vh;
+    overflow-x:hidden;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(155,127,199,0.28), transparent 45%),
+      radial-gradient(circle at 80% 75%, rgba(212,165,232,0.20), transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(240,208,138,0.08), transparent 60%),
+      linear-gradient(160deg, var(--lavender-deep), var(--lavender-mid) 55%, #241432);
+    background-attachment: fixed;
+    font-family: 'Vazirmatn', sans-serif;
+    color: var(--blush);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px 0;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  #particles{
+    position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;
+  }
+  .particle{
+    position:absolute; bottom:-10%;
+    width:6px; height:6px; border-radius:50%;
+    background: radial-gradient(circle, var(--lavender-light), transparent 70%);
+    opacity:0.5;
+    animation: particleRise linear infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes particleRise{
+    0%{ transform: translateY(0) translateX(0) scale(1); opacity:0; }
+    10%{ opacity:0.7; }
+    90%{ opacity:0.2; }
+    100%{ transform: translateY(-120vh) translateX(var(--drift,20px)) scale(0.4); opacity:0; }
+  }
+
+  /* ============ Loading overlay ============ */
+  .loading-overlay{
+    position:fixed;
+    inset:0;
+    z-index:200;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(45,27,61,0.92), rgba(20,10,35,0.98));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+  .loading-overlay.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+
+  .spinner{
+    position:relative;
+    width:64px;
+    height:64px;
+  }
+  .spinner::before,
+  .spinner::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    border:3px solid transparent;
+  }
+  .spinner::before{
+    border-top-color: var(--lavender-light);
+    border-right-color: var(--lilac);
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 20px rgba(200,170,230,0.4);
+  }
+  .spinner::after{
+    inset:8px;
+    border-bottom-color: var(--gold);
+    border-left-color: var(--gold-soft);
+    animation: spin 1.4s linear infinite reverse;
+    box-shadow: 0 0 16px rgba(240,208,138,0.35);
+  }
+  .spinner-inner{
+    position:absolute;
+    inset:20px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--lavender));
+    animation: pulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 24px rgba(200,170,230,0.6);
+  }
+  @keyframes spin{
+    0%{ transform: rotate(0deg); }
+    100%{ transform: rotate(360deg); }
+  }
+  @keyframes pulse{
+    0%,100%{ transform: scale(1); opacity:0.9; }
+    50%{ transform: scale(1.15); opacity:1; }
+  }
+
+  .loading-text{
+    font-size:0.9rem;
+    font-weight:500;
+    color: rgba(243,233,250,0.8);
+    letter-spacing:0.05em;
+    animation: fadeText 1.8s ease-in-out infinite;
+  }
+  .loading-dots::after{
+    content:'';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+  @keyframes dots{
+    0%{ content:''; }
+    25%{ content:'.'; }
+    50%{ content:'..'; }
+    75%{ content:'...'; }
+    100%{ content:''; }
+  }
+  @keyframes fadeText{
+    0%,100%{ opacity:0.7; }
+    50%{ opacity:1; }
+  }
+
+  /* ============ FAB ============ */
+  .quiz-fab{
+    position:fixed;
+    bottom:24px;
+    left:24px;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 22px;
+    border-radius:50px;
+    border:1px solid rgba(200,170,230,0.3);
+    cursor:pointer;
+    font-family:inherit;
+    font-size:0.95rem;
+    font-weight:700;
+    color:#fff;
+    background: linear-gradient(135deg, var(--lavender-mid), var(--lavender), var(--lilac));
+    background-size: 200% auto;
+    box-shadow:
+      0 14px 36px rgba(155,127,199,0.5),
+      0 0 0 6px rgba(200,170,230,0.10),
+      inset 0 1px 0 rgba(255,255,255,0.3);
+    animation: fabGradient 4s linear infinite, fabFloat 3s ease-in-out infinite;
+    transition: transform 0.3s cubic-bezier(.2,1.4,.4,1), box-shadow 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  .quiz-fab::after{
+    content:'';
+    position:absolute;
+    inset:-10px;
+    border-radius:50px;
+    border:1px solid rgba(200,170,230,0.3);
+    animation: fabRingPulse 2.4s ease-out infinite;
+    pointer-events:none;
+  }
+  .quiz-fab:hover{
+    transform: translateY(-4px) scale(1.05);
+    box-shadow:
+      0 22px 50px rgba(155,127,199,0.65),
+      0 0 0 8px rgba(200,170,230,0.15),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+  .quiz-fab:active{ transform: translateY(-2px) scale(0.97); }
+  .quiz-fab svg{ width:20px; height:20px; }
+  .quiz-fab .fab-text{ white-space:nowrap; letter-spacing:0.02em; }
+  .quiz-fab.hidden{ display:none !important; }
+
+  @keyframes fabGradient{
+    0%{ background-position: 0% center; }
+    100%{ background-position: 200% center; }
+  }
+  @keyframes fabFloat{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-6px); }
+  }
+  @keyframes fabRingPulse{
+    0%{ transform: scale(1); opacity:0.5; }
+    100%{ transform: scale(1.35); opacity:0; }
+  }
+
+  /* ============ Stage ============ */
+  .stage{
+    position:relative;
+    z-index:2;
+    width:min(600px, 94vw);
+    padding:48px 36px;
+    border-radius:28px;
+    background: var(--glass);
+    backdrop-filter: blur(22px) saturate(1.2);
+    -webkit-backdrop-filter: blur(22px) saturate(1.2);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 30px 80px rgba(20,10,35,0.55), inset 0 1px 0 rgba(255,255,255,0.08);
+    text-align:center;
+    animation: stagePop 0.55s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes stagePop{
+    0%{ transform: scale(0.88) translateY(24px); opacity:0; filter: blur(6px); }
+    100%{ transform: scale(1) translateY(0); opacity:1; filter: blur(0); }
+  }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, var(--gold-soft), var(--lavender));
+    box-shadow: 0 0 0 8px rgba(200,170,230,0.14), 0 0 40px rgba(200,170,230,0.5), inset 0 -4px 12px rgba(45,27,61,0.3);
+    margin-bottom:26px;
+    animation: heartbeat 1.8s ease-in-out infinite;
+    position:relative;
+  }
+  .badge svg{ width:28px; height:28px; }
+  .badge::after{
+    content:'';
+    position:absolute;
+    inset:-8px;
+    border-radius:50%;
+    border:1px solid rgba(240,208,138,0.3);
+    animation: ringPulse 2.4s ease-out infinite;
+  }
+  @keyframes ringPulse{
+    0%{ transform: scale(1); opacity:0.6; }
+    100%{ transform: scale(1.5); opacity:0; }
+  }
+  @keyframes heartbeat{
+    0%,100%{ transform: scale(1); }
+    12%{ transform: scale(1.15); }
+    24%{ transform: scale(0.97); }
+    36%{ transform: scale(1.08); }
+    50%{ transform: scale(1); }
+  }
+
+  .progress{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:26px;
+    height:12px;
+    align-items:center;
+  }
+  .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background: rgba(200,170,230,0.18);
+    transition: all 0.45s cubic-bezier(.2,1.4,.4,1);
+  }
+  .dot.filled{
+    background: var(--lavender-light);
+    box-shadow: 0 0 16px var(--lavender-light), 0 0 4px var(--lilac);
+    transform: scale(1.35);
+  }
+
+  h1{
+    font-size: clamp(1.25rem, 4.5vw, 1.65rem);
+    font-weight:700;
+    line-height:1.85;
+    margin: 0 0 32px;
+    color: var(--blush);
+    text-shadow: 0 2px 20px rgba(200,170,230,0.25);
+  }
+  .subtle{
+    font-size:0.9rem;
+    font-weight:300;
+    color: rgba(243,233,250,0.6);
+    margin-top:-14px;
+    margin-bottom:26px;
+    letter-spacing:0.02em;
+  }
+
+  .btn-row{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:8px;
+  }
+
+  button:not(.quiz-fab):not(.quiz-opt){
+    font-family:inherit;
+    font-size:1rem;
+    font-weight:700;
+    border:none;
+    border-radius:16px;
+    padding:15px 34px;
+    cursor:pointer;
+    transition: transform 0.2s cubic-bezier(.2,1.4,.4,1), box-shadow 0.25s ease, background 0.3s ease;
+    position:relative;
+    overflow:hidden;
+    user-select:none;
+    min-height:52px;
+    touch-action: manipulation;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  button:not(.quiz-fab):not(.quiz-opt)::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.6s ease;
+  }
+  button:not(.quiz-fab):not(.quiz-opt):active::before{ transform: translateX(120%); }
+
+  .yes-btn{
+    background: linear-gradient(135deg, var(--lavender), var(--lavender-mid));
+    color:#fff;
+    box-shadow: 0 12px 30px rgba(155,127,199,0.45), inset 0 1px 0 rgba(255,255,255,0.3);
+  }
+  .yes-btn:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(155,127,199,0.6), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+  .yes-btn:active{ transform: scale(0.97); }
+
+  .no-btn{
+    background: rgba(200,170,230,0.10);
+    color: var(--blush);
+    border: 1px solid var(--glass-border);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+  .no-btn:hover{ background: rgba(200,170,230,0.18); }
+  .no-btn:active{ transform: scale(0.97); }
+
+  .ghost-btn{
+    background: rgba(200,170,230,0.08);
+    border: 1px solid var(--glass-border);
+    color: var(--blush);
+    font-size:0.9rem;
+    padding:13px 24px;
+  }
+  .ghost-btn:hover{ background: rgba(200,170,230,0.16); }
+
+  .sorry-box .badge{
+    background: radial-gradient(circle at 35% 30%, var(--lavender-light), var(--lavender-mid));
+    animation: none;
+  }
+  .sorry-box .badge::after{ display:none; }
+  .sorry-text{
+    font-size:1.05rem;
+    line-height:2.1;
+    font-weight:500;
+    color: var(--blush);
+    margin-bottom:30px;
+    opacity:0.9;
+  }
+
+  .final-box{
+    background: linear-gradient(160deg, rgba(155,127,199,0.18), rgba(240,208,138,0.10));
+    border-color: rgba(240,208,138,0.25);
+  }
+  .final-box .badge{
+    width:84px;
+    height:84px;
+    animation: heartbeat 1.1s ease-in-out infinite;
+  }
+  .final-box .badge svg{ width:38px; height:38px; }
+  .final-text{
+    font-size:1.1rem;
+    line-height:2.15;
+    font-weight:500;
+    margin-bottom:14px;
+    text-shadow: 0 2px 16px rgba(200,170,230,0.25);
+  }
+  .final-question{
+    font-size:1.4rem;
+    font-weight:900;
+    background: linear-gradient(90deg, var(--gold), var(--lavender-light), var(--gold));
+    background-size: 200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    margin:24px 0 32px;
+    animation: shimmer 3s ease-in-out infinite, gradientMove 4s linear infinite;
+    line-height:1.6;
+  }
+  @keyframes shimmer{
+    0%,100%{ filter: drop-shadow(0 0 0px transparent); }
+    50%{ filter: drop-shadow(0 0 18px rgba(240,208,138,0.5)); }
+  }
+  @keyframes gradientMove{
+    0%{ background-position: 0% center; }
+    100%{ background-position: 200% center; }
+  }
+
+  .love-final{ animation: stagePop 0.7s cubic-bezier(.2,1.4,.4,1) both; }
+  .love-final .badge{
+    width:92px;
+    height:92px;
+    animation: heartbeat 0.9s ease-in-out infinite;
+  }
+  .love-final .badge svg{ width:44px; height:44px; }
+  .love-final h1{ font-size:1.45rem; line-height:2; }
+
+  /* ============ Quiz ============ */
+  .quiz-counter{
+    font-size:0.82rem;
+    color: rgba(243,233,250,0.5);
+    margin-bottom:14px;
+    font-weight:300;
+    letter-spacing:0.04em;
+  }
+  .quiz-question{
+    font-size:1.05rem;
+    font-weight:700;
+    line-height:1.9;
+    margin-bottom:24px;
+    color: var(--blush);
+    animation: slideIn 0.4s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes slideIn{
+    0%{ transform: translateX(24px); opacity:0; }
+    100%{ transform: translateX(0); opacity:1; }
+  }
+
+  .quiz-options{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:22px;
+  }
+  .quiz-opt{
+    background: rgba(200,170,230,0.07);
+    border: 1px solid var(--glass-border);
+    border-radius:14px;
+    padding:15px 20px;
+    font-family:inherit;
+    font-size:0.95rem;
+    font-weight:500;
+    color: var(--blush);
+    cursor:pointer;
+    text-align:right;
+    transition: all 0.25s cubic-bezier(.2,1.4,.4,1);
+    position:relative;
+    overflow:hidden;
+    min-height:52px;
+    touch-action: manipulation;
+  }
+  .quiz-opt::before{
+    content:'';
+    position:absolute;
+    right:0;
+    top:0;
+    bottom:0;
+    width:4px;
+    background: var(--lavender-light);
+    transform: scaleY(0);
+    transition: transform 0.25s ease;
+    border-radius:0 4px 4px 0;
+  }
+  .quiz-opt:hover{
+    background: rgba(200,170,230,0.14);
+    border-color: rgba(200,170,230,0.35);
+    transform: translateX(-3px);
+  }
+  .quiz-opt:active{ background: rgba(200,170,230,0.2); }
+  .quiz-opt.selected{
+    background: linear-gradient(135deg, rgba(155,127,199,0.35), rgba(212,165,232,0.2));
+    border-color: var(--lavender-light);
+    box-shadow: 0 0 24px rgba(200,170,230,0.3);
+    transform: translateX(-3px);
+  }
+  .quiz-opt.selected::before{ transform: scaleY(1); }
+
+  .quiz-input{
+    width:100%;
+    background: rgba(20,10,35,0.35);
+    border: 1px solid var(--glass-border);
+    border-radius:14px;
+    padding:16px 18px;
+    font-family:inherit;
+    font-size:1rem;
+    color: var(--blush);
+    text-align:right;
+    margin-bottom:16px;
+    transition: border 0.25s ease, box-shadow 0.25s ease;
+    resize:vertical;
+    min-height:110px;
+    line-height:1.8;
+  }
+  .quiz-input:focus{
+    outline:none;
+    border-color: var(--lavender-light);
+    box-shadow: 0 0 0 4px rgba(200,170,230,0.15), 0 0 24px rgba(200,170,230,0.2);
+  }
+  .quiz-input::placeholder{ color: rgba(243,233,250,0.35); }
+
+  /* ============ Summary ============ */
+  .summary-card{
+    background: linear-gradient(160deg, rgba(155,127,199,0.25), rgba(212,165,232,0.15));
+    border: 1px solid rgba(240,208,138,0.35);
+    border-radius:22px;
+    padding:30px 24px;
+    margin:8px auto 0;
+    text-align:right;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 24px 60px rgba(20,10,35,0.4);
+    animation: stagePop 0.6s cubic-bezier(.2,1.4,.4,1) both;
+    position:relative;
+    overflow:hidden;
+    width:100%;
+  }
+  .summary-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(240,208,138,0.18), transparent 50%),
+      radial-gradient(circle at 70% 80%, rgba(200,170,230,0.22), transparent 50%);
+    pointer-events:none;
+  }
+  .summary-title{
+    font-size:1.2rem;
+    font-weight:900;
+    margin-bottom:20px;
+    background: linear-gradient(90deg, var(--gold), var(--lavender-light), var(--gold));
+    background-size: 200% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-align:center;
+    animation: gradientMove 4s linear infinite;
+    position:relative;
+    z-index:1;
+  }
+  .summary-rows{ position:relative; z-index:1; }
+  .summary-row{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:13px 0;
+    border-bottom: 1px dashed rgba(200,170,230,0.2);
+    font-size:0.9rem;
+    line-height:1.8;
+  }
+  .summary-row:last-child{ border-bottom:none; }
+  .summary-q{
+    color: rgba(243,233,250,0.7);
+    font-weight:300;
+    font-size:0.82rem;
+  }
+  .summary-a{
+    font-weight:700;
+    color: var(--gold-soft);
+    font-size:0.95rem;
+    padding-right:10px;
+    border-right: 3px solid var(--lavender-light);
+    line-height:1.9;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .summary-total{
+    margin-top:18px;
+    padding-top:16px;
+    border-top: 1px solid rgba(240,208,138,0.3);
+    text-align:center;
+    font-size:1rem;
+    font-weight:700;
+    color: var(--blush);
+    position:relative;
+    z-index:1;
+  }
+  .summary-actions{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:22px;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ============ Send box ============ */
+  .send-box{
+    background: linear-gradient(160deg, rgba(155,127,199,0.18), rgba(212,165,232,0.12));
+    border: 1px solid rgba(200,170,230,0.3);
+  }
+  .send-box .badge{
+    background: radial-gradient(circle at 35% 30%, var(--lilac), var(--lavender-mid));
+    animation: heartbeat 1.4s ease-in-out infinite;
+  }
+  .send-title{
+    font-size:1.2rem;
+    font-weight:700;
+    line-height:2;
+    margin-bottom:16px;
+  }
+  .send-desc{
+    font-size:0.95rem;
+    font-weight:300;
+    line-height:2;
+    color: rgba(243,233,250,0.75);
+    margin-bottom:24px;
+  }
+  .send-note{
+    display:block;
+    font-size:0.82rem;
+    opacity:0.7;
+    margin-top:10px;
+    line-height:1.9;
+  }
+  .send-preview{
+    background: rgba(20,10,35,0.4);
+    border: 1px dashed rgba(240,208,138,0.35);
+    border-radius:16px;
+    padding:18px 20px;
+    margin-bottom:22px;
+    text-align:right;
+    font-size:0.85rem;
+    color: rgba(243,233,250,0.65);
+    line-height:1.9;
+    max-height:130px;
+    overflow-y:auto;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+
+  .hidden{ display:none !important; }
+
+  .toast{
+    position:fixed;
+    bottom:90px;
+    left:50%;
+    transform: translateX(-50%) translateY(120px);
+    background: linear-gradient(135deg, var(--lavender), var(--lavender-mid));
+    color:#fff;
+    padding:14px 26px;
+    border-radius:16px;
+    font-weight:700;
+    font-size:0.9rem;
+    box-shadow: 0 20px 50px rgba(155,127,199,0.6);
+    z-index:100;
+    transition: transform 0.4s cubic-bezier(.2,1.4,.4,1);
+    pointer-events:none;
+    max-width:90vw;
+    text-align:center;
+  }
+  .toast.show{ transform: translateX(-50%) translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+
+  @media (max-width: 520px){
+    html,body{ padding:12px 0; align-items:flex-start; }
+    .stage{
+      padding:34px 20px;
+      border-radius:22px;
+      width:96vw;
+      margin-top:8px;
+      margin-bottom:80px;
+    }
+    .badge{ width:56px; height:56px; margin-bottom:20px; }
+    .badge svg{ width:24px; height:24px; }
+    .final-box .badge{ width:72px; height:72px; }
+    .final-box .badge svg{ width:32px; height:32px; }
+    .love-final .badge{ width:80px; height:80px; }
+    .love-final .badge svg{ width:38px; height:38px; }
+    h1{ font-size:1.12rem; margin-bottom:24px; line-height:1.9; }
+    .love-final h1{ font-size:1.2rem; }
+    button:not(.quiz-fab):not(.quiz-opt){ padding:14px 26px; font-size:0.95rem; border-radius:14px; }
+    .yes-btn, .no-btn{ flex:1; min-width:110px; }
+    .final-question{ font-size:1.12rem; margin:20px 0 26px; }
+    .final-text{ font-size:0.98rem; line-height:2.1; }
+    .summary-card{ padding:24px 18px; border-radius:18px; }
+    .summary-title{ font-size:1.02rem; margin-bottom:16px; }
+    .summary-row{ padding:11px 0; }
+    .summary-q{ font-size:0.78rem; }
+    .summary-a{ font-size:0.88rem; }
+    .summary-actions{ gap:8px; }
+    .summary-actions button{ flex:1; min-width:110px; }
+    .quiz-question{ font-size:0.98rem; }
+    .quiz-opt{ font-size:0.9rem; padding:14px 16px; }
+    .send-title{ font-size:1.05rem; }
+    .send-desc{ font-size:0.88rem; }
+
+    .quiz-fab{
+      bottom:16px;
+      left:16px;
+      right:16px;
+      padding:14px 20px;
+      justify-content:center;
+      font-size:0.9rem;
+    }
+    .spinner{ width:54px; height:54px; }
+    .spinner-inner{ inset:17px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== لودینگ اولیه ===== -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner">
+    <div class="spinner-inner"></div>
+  </div>
+  <div class="loading-text">در حال آماده‌سازی<span class="loading-dots"></span></div>
+</div>
+
+<div id="particles"></div>
+<div class="toast" id="toast">کپی شد</div>
+
+<!-- ===== FAB ===== -->
+<button class="quiz-fab" id="quizFab" onclick="startQuiz()" aria-label="نمایش سوالات">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="16" y1="13" x2="8" y2="13"/>
+    <line x1="16" y1="17" x2="8" y2="17"/>
+    <polyline points="10 9 9 9 8 9"/>
+  </svg>
+  <span class="fab-text">نمایش سوالات</span>
+</button>
+
+<!-- Stage 0 -->
+<div class="stage" id="stage-open">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+      <polyline points="22,6 12,13 2,6"/>
+    </svg>
+  </div>
+  <h1>یه چیزی هست... میخوای بدونی چی میخوام بهت بگم؟</h1>
+  <div class="btn-row">
+    <button class="yes-btn" onclick="sayYes()">آره</button>
+    <button class="no-btn" onclick="sayNo()">نه</button>
+  </div>
+</div>
+
+<!-- Confirm -->
+<div class="stage hidden" id="stage-confirm">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+  </div>
+  <div class="progress" id="progress"></div>
+  <h1>مطمعنی؟</h1>
+  <div class="subtle" id="confirm-counter"></div>
+  <div class="btn-row">
+    <button class="yes-btn" onclick="sayYes()">آره</button>
+    <button class="no-btn" onclick="sayNo()">نه</button>
+  </div>
+</div>
+
+<!-- Sorry -->
+<div class="stage hidden sorry-box" id="stage-sorry">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="8" y1="15" x2="16" y2="15"/>
+      <line x1="9" y1="9" x2="9.01" y2="9"/>
+      <line x1="15" y1="9" x2="15.01" y2="9"/>
+    </svg>
+  </div>
+  <p class="sorry-text">فقط یه درخواست ساده بود... ولش<br>اگر هم نمیخوای میتونی قبول نکنی</p>
+  <div class="btn-row">
+    <button class="yes-btn" onclick="resumeAfterNo()">اوک</button>
+  </div>
+</div>
+
+<!-- Quiz -->
+<div class="stage hidden" id="stage-quiz">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 20h9"/>
+      <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+    </svg>
+  </div>
+  <div class="quiz-counter" id="quiz-counter"></div>
+  <div class="quiz-question" id="quiz-question">سوال</div>
+  <div id="quiz-body"></div>
+  <div class="btn-row">
+    <button class="ghost-btn hidden" id="quiz-back" onclick="prevQuestion()">قبلی</button>
+    <button class="yes-btn hidden" id="quiz-next" onclick="nextQuestion()">بعدی</button>
+  </div>
+</div>
+
+<!-- Send screen -->
+<div class="stage hidden send-box" id="stage-send">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13"/>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+    </svg>
+  </div>
+  <div class="send-title">آماده شد</div>
+  <div class="send-desc">
+    جوابات آماده‌ست و فقط برای طرف مقابل ذخیره شده.<br>
+    روی دکمه‌ی زیر بزن تا متن آماده رو کپی کنی و براش بفرستی.
+    <span class="send-note">(به خودت نشون داده نمیشه تا بتونی راحت بفرستیش)</span>
+  </div>
+  <div class="send-preview" id="send-preview"></div>
+  <div class="btn-row">
+    <button class="yes-btn" onclick="copyAndSend()">کپی و آماده‌ی ارسال</button>
+  </div>
+</div>
+
+<!-- Result summary -->
+<div class="stage hidden" id="stage-result">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  </div>
+  <h1>جواب‌های طرف مقابلت</h1>
+  <div class="summary-card" id="summary-card">
+    <div class="summary-title">پاسخ‌های او</div>
+    <div class="summary-rows" id="summary-rows"></div>
+    <div class="summary-total" id="summary-total"></div>
+  </div>
+  <div class="summary-actions">
+    <button class="ghost-btn" onclick="copyResult()">کپی</button>
+    <button class="ghost-btn" onclick="downloadImage()">دانلود عکس</button>
+  </div>
+</div>
+
+<!-- Final -->
+<div class="stage hidden final-box love-final" id="stage-final">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+  </div>
+  <p class="final-text">حقیقتش... خیلی خیلی وابستت شدم<br>میدونم شاید درخواست نابجایی باشه ولی...<br>معذرت میخوام</p>
+  <div class="final-question">میشه باهم وارد یه رابطه شیم؟</div>
+  <div class="btn-row">
+    <button class="yes-btn" onclick="finalYes()">بله</button>
+    <button class="no-btn runaway" onmouseover="dodge(this)" onclick="event.preventDefault()">نه</button>
+  </div>
+</div>
+
+<!-- Ending -->
+<div class="stage hidden love-final" id="stage-ending">
+  <div class="badge">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+  </div>
+  <h1>خیلی خوشحالم کردی...<br>دوستت دارم :)</h1>
+</div>
+
+<script>
+  /* ============ particles ============ */
+  const particlesContainer = document.getElementById('particles');
+  function spawnParticle(originBottom){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.setProperty('--drift', (Math.random()*160-80) + 'px');
+    const size = 4 + Math.random()*6;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    if(originBottom) p.style.bottom = originBottom;
+    const duration = 9 + Math.random()*9;
+    p.style.animationDuration = duration + 's';
+    particlesContainer.appendChild(p);
+    setTimeout(()=> p.remove(), duration*1000);
+  }
+  setInterval(()=> spawnParticle(), 500);
+  for(let i=0;i<14;i++) setTimeout(()=> spawnParticle(), i*220);
+
+  /* ============ state ============ */
+  const TOTAL_CONFIRMS = 5;
+  let confirmCount = 0;
+  let cameFromNo = null;
+
+  const stages = {
+    open:    document.getElementById('stage-open'),
+    confirm: document.getElementById('stage-confirm'),
+    sorry:   document.getElementById('stage-sorry'),
+    quiz:    document.getElementById('stage-quiz'),
+    send:    document.getElementById('stage-send'),
+    result:  document.getElementById('stage-result'),
+    final:   document.getElementById('stage-final'),
+    ending:  document.getElementById('stage-ending')
+  };
+  const progressEl = document.getElementById('progress');
+  const counterEl  = document.getElementById('confirm-counter');
+  const quizCounter  = document.getElementById('quiz-counter');
+  const quizQuestion = document.getElementById('quiz-question');
+  const quizBody     = document.getElementById('quiz-body');
+  const quizNextBtn  = document.getElementById('quiz-next');
+  const quizBackBtn  = document.getElementById('quiz-back');
+  const summaryRows  = document.getElementById('summary-rows');
+  const summaryTotal = document.getElementById('summary-total');
+  const sendPreview  = document.getElementById('send-preview');
+  const toast        = document.getElementById('toast');
+  const quizFab      = document.getElementById('quizFab');
+  const loadingOverlay = document.getElementById('loadingOverlay');
+
+  function hideAll(){ Object.values(stages).forEach(s => s.classList.add('hidden')); }
+
+  function updateFab(){
+    const hideOn = ['quiz', 'send', 'result'];
+    let shouldHide = false;
+    hideOn.forEach(name => {
+      if(!stages[name].classList.contains('hidden')) shouldHide = true;
+    });
+    quizFab.classList.toggle('hidden', shouldHide);
+  }
+
+  function showStage(name){
+    hideAll();
+    const el = stages[name];
+    el.classList.remove('hidden');
+    el.style.animation = 'none';
+    void el.offsetHeight;
+    el.style.animation = '';
+    if(window.matchMedia('(max-width: 520px)').matches){
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+    updateFab();
+  }
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(()=> toast.classList.remove('show'), 2400);
+  }
+
+  /* ============ لودینگ ============ */
+  function showLoading(text){
+    if(text) loadingOverlay.querySelector('.loading-text').innerHTML = text + '<span class="loading-dots"></span>';
+    loadingOverlay.classList.remove('hide');
+  }
+  function hideLoading(){
+    loadingOverlay.classList.add('hide');
+  }
+
+  // لودینگ اولیه - کوتاه
+  window.addEventListener('load', () => {
+    setTimeout(()=> hideLoading(), 900);
+  });
+  // fallback در صورت طولانی شدن load
+  setTimeout(()=> hideLoading(), 2000);
+
+  /* ============ confirmations ============ */
+  function renderProgress(){
+    progressEl.innerHTML = '';
+    for(let i=0;i<TOTAL_CONFIRMS;i++){
+      const d = document.createElement('div');
+      d.className = 'dot' + (i < confirmCount ? ' filled' : '');
+      progressEl.appendChild(d);
+    }
+    counterEl.textContent = confirmCount + ' از ' + TOTAL_CONFIRMS;
+  }
+
+  function sayYes(){
+    if(confirmCount < TOTAL_CONFIRMS){
+      confirmCount++;
+      if(confirmCount >= TOTAL_CONFIRMS){
+        showStage('final');
+        burstConfetti(40);
+      } else {
+        renderProgress();
+        showStage('confirm');
+      }
+    }
+  }
+
+  function sayNo(){
+    if(!stages.open.classList.contains('hidden')) cameFromNo = 'open';
+    else if(!stages.confirm.classList.contains('hidden')) cameFromNo = 'confirm';
+    else if(!stages.quiz.classList.contains('hidden')) cameFromNo = 'quiz';
+    else if(!stages.send.classList.contains('hidden')) cameFromNo = 'send';
+    else if(!stages.result.classList.contains('hidden')) cameFromNo = 'result';
+    else if(!stages.final.classList.contains('hidden')) cameFromNo = 'final';
+    else cameFromNo = 'open';
+    showStage('sorry');
+  }
+
+  function resumeAfterNo(){
+    if(cameFromNo === 'open')        showStage('open');
+    else if(cameFromNo === 'confirm'){ renderProgress(); showStage('confirm'); }
+    else if(cameFromNo === 'quiz')   showStage('quiz');
+    else if(cameFromNo === 'send')   showStage('send');
+    else if(cameFromNo === 'result') showStage('result');
+    else if(cameFromNo === 'final')  showStage('final');
+    else showStage('open');
+  }
+
+  /* ============ quiz ============ */
+  const questions = [
+    {
+      type: 'choice',
+      q: 'اسمت رو چی صدا کنم؟ یا چطور دوست داری صدات کنن؟',
+      options: [
+        'با اسم کوچیکم',
+        'با یه لقب خاص',
+        'با فامیلیم',
+        'خودت یه اسم قشنگ برام انتخاب کن'
+      ]
+    },
+    {
+      type: 'text',
+      q: 'یه چیز کوچیک که همیشه حالت رو خوب می‌کنه چیه؟',
+      placeholder: 'مثلاً: آهنگ، بارون، شکلات، قدم زدن...'
+    },
+    {
+      type: 'choice',
+      q: 'اگه بخوایم یه روز با هم وقت بگذرونیم، کجا رو ترجیح می‌دی؟',
+      options: [
+        'یه کافه‌ی دنج و آروم',
+        'یه پارک و قدم زدن',
+        'سینما و فیلم',
+        'هر جایی که تو بگی'
+      ]
+    },
+    {
+      type: 'text',
+      q: 'یه چیزی که خیلی دوست داری درباره‌ی خودت بگی چیه؟ (هرچی که دوست داری)',
+      placeholder: 'اینجا آزادی هرچی دلت می‌خواد بنویسی...'
+    },
+    {
+      type: 'choice',
+      q: 'از نظر تو یه رابطه‌ی خوب باید چه ویژگی‌ای داشته باشه؟',
+      options: [
+        'اعتماد و صداقت',
+        'خنده و خوشی',
+        'درک متقابل',
+        'همه‌ی این‌ها با هم'
+      ]
+    },
+    {
+      type: 'text',
+      q: 'اگه بخوای یه حرف قلبی به کسی بگی که تازه می‌شناسی، چی می‌گی؟',
+      placeholder: 'هرچی دلت می‌خواد بنویس'
+    },
+    {
+      type: 'choice',
+      q: 'دوست داری بیشتر درباره‌ی چه چیزی با هم حرف بزنیم؟',
+      options: [
+        'علاقه‌ها و سرگرمی‌ها',
+        'احساسات و افکار',
+        'آینده و آرزوها',
+        'همه‌ی این‌ها'
+      ]
+    },
+    {
+      type: 'text',
+      q: 'یه آرزو یا رویا که دوست داری یه روز بهش برسی چیه؟',
+      placeholder: 'آرزوت رو بنویس...'
+    }
+  ];
+
+  let currentQ = 0;
+  let userAnswers = [];
+
+  function startQuiz(){
+    currentQ = 0;
+    userAnswers = new Array(questions.length).fill(null);
+    renderQuiz();
+    showStage('quiz');
+  }
+
+  function renderQuiz(){
+    const q = questions[currentQ];
+    quizCounter.textContent = 'سوال ' + (currentQ+1) + ' از ' + questions.length;
+    quizQuestion.textContent = q.q;
+    quizQuestion.style.animation = 'none';
+    void quizQuestion.offsetHeight;
+    quizQuestion.style.animation = '';
+
+    quizBody.innerHTML = '';
+    quizNextBtn.classList.add('hidden');
+    quizBackBtn.classList.toggle('hidden', currentQ === 0);
+
+    if(q.type === 'choice'){
+      const wrap = document.createElement('div');
+      wrap.className = 'quiz-options';
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-opt' + (userAnswers[currentQ] === opt ? ' selected' : '');
+        btn.textContent = opt;
+        btn.onclick = () => selectOption(idx, opt);
+        wrap.appendChild(btn);
+      });
+      quizBody.appendChild(wrap);
+    } else {
+      const ta = document.createElement('textarea');
+      ta.className = 'quiz-input';
+      ta.placeholder = q.placeholder || 'اینجا بنویس...';
+      ta.value = userAnswers[currentQ] || '';
+      ta.oninput = () => {
+        userAnswers[currentQ] = ta.value;
+        updateNextBtn();
+      };
+      quizBody.appendChild(ta);
+    }
+    updateNextBtn();
+  }
+
+  function selectOption(idx, opt){
+    const allOpts = quizBody.querySelectorAll('.quiz-opt');
+    allOpts.forEach((b, i) => b.classList.toggle('selected', i === idx));
+    userAnswers[currentQ] = opt;
+    updateNextBtn();
+  }
+
+  function updateNextBtn(){
+    const ans = userAnswers[currentQ];
+    const ok = ans !== null && (typeof ans !== 'string' || ans.trim() !== '');
+    if(ok){
+      quizNextBtn.classList.remove('hidden');
+      quizNextBtn.textContent = currentQ === questions.length - 1 ? 'پایان' : 'بعدی';
+    } else {
+      quizNextBtn.classList.add('hidden');
+    }
+  }
+
+  function nextQuestion(){
+    const ans = userAnswers[currentQ];
+    const ok = ans !== null && (typeof ans !== 'string' || ans.trim() !== '');
+    if(!ok) return;
+    if(currentQ < questions.length - 1){
+      currentQ++;
+      renderQuiz();
+    } else {
+      showSendScreen();
+    }
+  }
+
+  function prevQuestion(){
+    if(currentQ > 0){
+      currentQ--;
+      renderQuiz();
+    }
+  }
+
+  /* ============ send screen ============ */
+  function buildPlainText(){
+    let txt = 'جواب‌های طرف مقابلت\n\n';
+    questions.forEach((q, i) => {
+      const a = (userAnswers[i] || '—').toString().trim() || '—';
+      txt += `${i+1}. ${q.q}\n   → ${a}\n\n`;
+    });
+    txt += '— ساخته شده با محبت —';
+    return txt;
+  }
+
+  function showSendScreen(){
+    const answered = userAnswers.filter(a => a !== null && (typeof a !== 'string' || a.trim() !== '')).length;
+    sendPreview.textContent = `تعداد ${answered} پاسخ ثبت شد\nمحتوا فقط برای طرف مقابل قابل مشاهده‌ست\nبا دکمه‌ی زیر متن رو کپی کن و براش بفرست`;
+    showStage('send');
+    burstConfetti(15);
+  }
+
+  function copyAndSend(){
+    const txt = buildPlainText();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(
+        ()=> { showToast('کپی شد! حالا براش بفرست'); openResultForPartner(); },
+        ()=> { fallbackCopy(txt); openResultForPartner(); }
+      );
+    } else {
+      fallbackCopy(txt);
+      openResultForPartner();
+    }
+  }
+
+  function openResultForPartner(){
+    renderResultCard();
+    showStage('result');
+  }
+
+  function renderResultCard(){
+    summaryRows.innerHTML = '';
+    questions.forEach((q, i) => {
+      const row = document.createElement('div');
+      row.className = 'summary-row';
+      const ans = (userAnswers[i] || '—').toString().trim() || '—';
+      row.innerHTML = `
+        <span class="summary-q">${i+1}. ${q.q}</span>
+        <span class="summary-a">${escapeHtml(ans)}</span>
+      `;
+      summaryRows.appendChild(row);
+    });
+    summaryTotal.innerHTML = `ممنون که جواب دادی<br><span style="font-size:0.9rem;font-weight:500;display:block;margin-top:8px">حالا بریم سر اصل مطلب...</span>`;
+  }
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+
+  /* ============ copy / download ============ */
+  function copyResult(){
+    const txt = buildPlainText();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(
+        ()=> showToast('کپی شد'),
+        ()=> fallbackCopy(txt)
+      );
+    } else {
+      fallbackCopy(txt);
+    }
+  }
+
+  function fallbackCopy(txt){
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{
+      document.execCommand('copy');
+      showToast('کپی شد');
+    }catch(e){
+      showToast('کپی نشد');
+    }
+    document.body.removeChild(ta);
+  }
+
+  function downloadImage(){
+    const card = document.getElementById('summary-card');
+    if(!card || typeof html2canvas === 'undefined'){
+      showToast('دانلود ممکن نیست');
+      return;
+    }
+
+    // نمایش لودینگ کوچیک
+    showLoading('در حال ساخت عکس');
+
+    const originalBg = card.style.background;
+    card.style.background = 'linear-gradient(160deg, #2d1b3d, #4a2d63)';
+
+    // صبر کوتاه تا لودینگ دیده بشه و layout پایدار بشه
+    setTimeout(() => {
+      html2canvas(card, {
+        backgroundColor: null,
+        scale: Math.min(3, window.devicePixelRatio * 1.5),
+        useCORS: true,
+        logging: false,
+        windowWidth: card.scrollWidth,
+        windowHeight: card.scrollHeight
+      }).then(canvas => {
+        card.style.background = originalBg || '';
+        try{
+          const link = document.createElement('a');
+          link.download = 'نتیجه-اسطوخودوس.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+          showToast('دانلود شد');
+          burstConfetti(30);
+        }catch(err){
+          showToast('دانلود ممکن نشد');
+        }
+        hideLoading();
+      }).catch(()=>{
+        card.style.background = originalBg || '';
+        showToast('دانلود ممکن نشد');
+        hideLoading();
+      });
+    }, 350);
+  }
+
+  /* ============ final ============ */
+  function finalYes(){
+    showStage('ending');
+    burstConfetti(60);
+  }
+
+  function dodge(btn){
+    const stage = btn.closest('.stage');
+    if(!stage) return;
+    const stageRect = stage.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+
+    // محدوده‌ی امن داخل کارت (با حاشیه ۲۰ پیکسل)
+    const pad = 20;
+    const maxX = Math.max(10, stageRect.width  - btnRect.width  - pad*2);
+    const maxY = Math.max(10, stageRect.height - btnRect.height - pad*2);
+
+    const x = Math.random()*maxX - maxX/2;
+    const y = Math.random()*maxY - maxY/2;
+
+    btn.style.position = 'relative';
+    btn.style.transition = 'transform 0.3s cubic-bezier(.2,1.4,.4,1)';
+    btn.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random()*16-8}deg)`;
+  }
+
+  function burstConfetti(count){
+    count = count || 40;
+    for(let i=0;i<count;i++){
+      setTimeout(()=>{
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = 6 + Math.random()*10;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = Math.random()*100 + 'vw';
+        p.style.bottom = (30 + Math.random()*30) + '%';
+        p.style.setProperty('--drift', (Math.random()*220-110) + 'px');
+        p.style.background = 'radial-gradient(circle, ' +
+          (Math.random() > 0.5 ? 'var(--gold-soft)' : 'var(--lavender-light)') + ', transparent 70%)';
+        const duration = 3 + Math.random()*3;
+        p.style.animationDuration = duration + 's';
+        particlesContainer.appendChild(p);
+        setTimeout(()=> p.remove(), duration*1000);
+      }, i*25);
+    }
+  }
+
+  /* ============ keyboard ============ */
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter'){
+      const active = document.activeElement;
+      if(active && active.tagName === 'BUTTON') active.click();
+    }
+  });
+
+  // وضعیت اولیه‌ی FAB
+  updateFab();
+</script>
+
+</body>
+</html>
